@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Mindmap</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .markdown-section, .mindmap-section {
+            flex: 1;
+        }
+        textarea {
+            width: 100%;
+            height: 400px;
+            font-family: monospace;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ccc;
+        }
+        .button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your Generated Mindmap</h1>
+    <div class="container">
+        <div class="markdown-section">
+            <h2>Markdown Source</h2>
+            <textarea readonly>{{ markdown }}</textarea>
+        </div>
+        <div class="mindmap-section">
+            <h2>Visual Mindmap</h2>
+            <iframe src="{{ mindmap_url }}"></iframe>
+        </div>
+    </div>
+    <a href="/" class="button">Convert Another PDF</a>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF to Mindmap Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .upload-box {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>PDF to Mindmap Converter</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="upload-box">
+            <p>Upload your PDF file:</p>
+            <input type="file" name="file" accept=".pdf">
+        </div>
+        <button type="submit">Generate Mindmap</button>
+    </form>
+</body>
+</html>

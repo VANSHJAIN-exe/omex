@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results: {{ topic_name }} - {{ subtopic_name }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+            text-align: center;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #3498db;
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+        .result-box {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .score {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+            color: {% if passed %}#27ae60{% else %}#e74c3c{% endif %};
+        }
+        .percentage {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .tokens {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .passed {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .failed {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .feedback {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: {% if passed %}#e8f5e9{% else %}#ffebee{% endif %};
+        }
+        .actions {
+            margin-top: 30px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 0 10px;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .btn-retry {
+            background-color: #f39c12;
+            color: white;
+        }
+        .btn-retry:hover {
+            background-color: #e67e22;
+        }
+        .btn-study-plan {
+            background-color: #3498db;
+            color: white;
+        }
+        .btn-study-plan:hover {
+            background-color: #2980b9;
+        }
+        .btn-next-quiz {
+            background-color: #27ae60;
+            color: white;
+        }
+        .btn-next-quiz:hover {
+            background-color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ topic_name }}</h1>
+    <h2>{{ subtopic_name }}</h2>
+
+    <div class="result-box">
+        <div class="score">{{ score }}/{{ total }}</div>
+        <div class="percentage">{{ percentage|round(1) }}%</div>
+        {% if passed %}
+            <div class="tokens">Tokens Awarded: {{ tokens }}</div>
+        {% endif %}
+
+        <div class="feedback">
+            {% if passed %}
+                <p class="passed">Congratulations! You passed this quiz.</p>
+            {% else %}
+                <p class="failed">Keep studying! You didn't pass this time.</p>
+                <p>You need 70% to pass. Try reviewing the material and attempting again.</p>
+            {% endif %}
+        </div>
+
+        <div class="actions">
+            {% if not passed %}
+                <a href="{{ url_for('view_quiz', topic_index=topic_index, subtopic_index=subtopic_index) }}" class="btn btn-retry">Retry Quiz</a>
+            {% endif %}
+            <a href="{{ url_for('study_plan_landing') }}" class="btn btn-study-plan">Back to Study Plan</a>
+        </div>
+    </div>
+</body>
+</html>

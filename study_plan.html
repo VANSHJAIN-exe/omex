@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Plan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .tokens {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            color: #27ae60;
+        }
+        .topic-header {
+            background-color: #34495e;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .topic-duration {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            background-color: #2980b9;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+        .subtopic {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .subtopic-info {
+            flex: 1;
+        }
+        .subtopic-title {
+            font-weight: bold;
+        }
+        .subtopic-duration {
+            color: #777;
+            font-size: 14px;
+        }
+        .subtopic-status {
+            text-align: right;
+            width: 200px;
+        }
+        .unlocked-badge {
+            background-color: #2ecc71;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin-bottom: 5px;
+        }
+        .quiz-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .quiz-button:hover {
+            background-color: #2980b9;
+        }
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+        .flash-message {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for message in messages %}
+        <div class="flash-message">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<h1>Your Study Plan</h1>
+<div class="tokens">Tokens: {{ tokens }}</div>
+<p style="text-align: center;">All quizzes are available for practice. Recommended study times are shown for guidance.</p>
+
+{% for topic in study_plan %}
+    <div class="study-section">
+        <div class="topic-header">
+            {{ topic.topic }}
+            <span class="topic-duration">{{ topic.duration_minutes }} mins</span>
+        </div>
+
+        {% for subtopic in topic.subtopics %}
+            <div class="subtopic">
+                <div class="subtopic-info">
+                    <div class="subtopic-title">{{ subtopic.name }}</div>
+                    <div class="subtopic-duration">Estimated: {{ subtopic.duration_minutes }} mins</div>
+                </div>
+                <div class="subtopic-status">
+                    {% set quiz_key = subtopic.topic_index ~ '_' ~ subtopic.subtopic_index %}
+                    {% if quiz_progress['completed'].get(quiz_key) %}
+                        <div class="unlocked-badge">Completed</div>
+                        <div>Score: {{ quiz_progress['scores'][quiz_key]['score'] }}/{{ quiz_progress['scores'][quiz_key]['total'] }}</div>
+                        <div>Tokens: {{ quiz_progress['scores'][quiz_key]['tokens'] }}</div>
+                    {% endif %}
+                    <a href="{{ url_for('view_quiz', topic_index=subtopic.topic_index, subtopic_index=subtopic.subtopic_index) }}"
+                       class="quiz-button">
+                       {% if quiz_progress['completed'].get(quiz_key) %}Retake Quiz{% else %}Take Quiz{% endif %}
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endfor %}
+
+</body>
+</html>
